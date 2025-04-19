@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -50,14 +51,11 @@ public class Drivers {
 	@Column(name = "LicenseNumber")
 	private String licenseNumber; 
 	
-	@Column(name = "LicenseDuration")
-	private Date licenseDuration;
-	
 	@Column(name = "NTExpiry")
-	private String ntExpiry ;
+	private LocalDate ntExpiry ;
 	
 	@Column(name = "TExpiry")
-	private String tExpiry;
+	private LocalDate tExpiry;
 	
 	@Column(name = "AccNumber")
 	private String accNumber;

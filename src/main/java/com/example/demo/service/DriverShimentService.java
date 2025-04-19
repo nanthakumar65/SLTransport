@@ -4,11 +4,13 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 
+import com.example.demo.data.DriverShipmentData;
 import com.example.demo.data.ResponseData;
 import com.example.demo.model.DriverExpenseType;
 import com.example.demo.model.DriverShipment;
 import com.example.demo.model.MaterialMaster;
 import com.example.demo.model.ShipmentTransType;
+import com.example.demo.payload.CommonPagination;
 import com.example.demo.payload.DriverShimentPayload;
 
 public interface DriverShimentService {
@@ -21,6 +23,10 @@ public interface DriverShimentService {
 
 	public ResponseData saveShipment(DriverShimentPayload driverShimentPayload);
 
-	public Page<DriverShipment> getDriverShipment(Long pageNo, Long page);
+	public List<DriverShipmentData> getDriverShipment(CommonPagination commonPagination);
+
+	public ResponseData updateShipment(Long shipmentId, DriverShimentPayload updateShipmentPayload);
+
+	public ResponseData deleteDriverShipment(Long shipmentId);
 
 }

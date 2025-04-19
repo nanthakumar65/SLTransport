@@ -1,7 +1,7 @@
 package com.example.demo.payload;
 
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import lombok.Data;
 
@@ -20,9 +20,9 @@ public class NewDriverPayload {
 	
 	private String licenseNumber;
 	
-	private String ntExpiry;
+	private LocalDate ntExpiry;
 	
-	private String texpiry;
+	private LocalDate texpiry;
 	
 	private String accNumber;
 	

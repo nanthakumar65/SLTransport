@@ -1,5 +1,6 @@
 package com.example.demo.service.serviceImpl;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.data.PaginationData;
 import com.example.demo.data.ResponseData;
+import com.example.demo.data.VechileNumberResponse;
 import com.example.demo.model.Customers;
 import com.example.demo.model.VehicleEntry;
 import com.example.demo.payload.CommonPagination;
@@ -119,17 +121,49 @@ public class VehicleServiceImpl implements VehicleInterface {
 	@Override
 	public PaginationData getVechileList(CommonPagination commonPagination) {
 		PaginationData paginationData = new PaginationData();
-		Pageable pageable = PageRequest.of(commonPagination.getPageNo().intValue(),
-				commonPagination.getPageSize().intValue());
-		Page<VehicleEntry> PageVechileList = vehicleRepo.findAll(pageable);
-		List<VehicleEntry> VechileList = PageVechileList.getContent();
-		if (!VechileList.isEmpty() && VechileList != null) {
-			paginationData.setList(VechileList);
-			paginationData.setTotalCount(VechileList.size());
-			return paginationData;
-}
-		return null;
-		
+		long count = vehicleRepo.count();
+		List<VehicleEntry> VechileList = null;
 
-}
+		/** SEARCH **/
+		if (commonPagination.getSearchKey() != null) {
+			String searchKey = commonPagination.getSearchKey();
+			Pageable pageable = PageRequest.of(commonPagination.getPageNo().intValue(),
+					commonPagination.getPageSize().intValue());
+			Page<VehicleEntry> vehicleListPage = vehicleRepo.findByVehicleNumberOrOwnerNameOrBrandName(searchKey,
+					searchKey, searchKey, pageable);
+			VechileList = vehicleListPage.getContent();
+		}
+		/** GET ALL VEHICLES **/
+		else {
+			Pageable pageable = PageRequest.of(commonPagination.getPageNo().intValue(),
+					commonPagination.getPageSize().intValue());
+			Page<VehicleEntry> PageVechileList = vehicleRepo.findAll(pageable);
+			VechileList = PageVechileList.getContent();
+		}
+		if ( VechileList != null) {
+			paginationData.setList(VechileList);
+			paginationData.setTotalCount(count);
+			return paginationData;
+		}
+		return paginationData;
+	}
+
+	@Override
+	public List<VechileNumberResponse> getVechileNumber() {
+		List<VehicleEntry> vechileList = vehicleRepo.findAll();
+
+		List<VechileNumberResponse> vechileResponseList = new ArrayList<>();
+		if (!vechileList.isEmpty() && vechileList != null) {
+			for (VehicleEntry vechile : vechileList) {
+				VechileNumberResponse vechileResponse = new VechileNumberResponse();
+				vechileResponse.setId(vechile.getId());
+				vechileResponse.setVehicleNumber(vechile.getVehicleNumber());
+				vechileResponseList.add(vechileResponse);
+			}
+		}
+
+		return vechileResponseList;
+	}
+	
+	
 }

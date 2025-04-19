@@ -65,20 +65,34 @@ public class DriversServiceImpl implements DriversService{
 	public PaginationData getDriversDetails(Long isActive, CommonPagination commonPagination) {
 		PaginationData paginationData = new PaginationData();
 		List<AllDriversData> allDriversDataList = new ArrayList<>();
-		Pageable pageable = PageRequest.of(commonPagination.getPageNo().intValue(),
-				commonPagination.getPageSize().intValue());
-		Page<Drivers> drivers = driversRepo.findAll(pageable);
-		List<Drivers> driverscontent = drivers.getContent();
+		long count = driversRepo.count();
+		List<Drivers> driverscontent = null;
+
+		/** SEARCH **/
+		if (commonPagination.getSearchKey() != null) {
+			String searchKey = commonPagination.getSearchKey();
+			Pageable pageable = PageRequest.of(commonPagination.getPageNo().intValue(),
+					commonPagination.getPageSize().intValue());
+			Page<Drivers> drivers = driversRepo.findByNameOrMobileNumberOrFatherName(searchKey, searchKey, searchKey, pageable);
+			driverscontent = drivers.getContent();
+		}
+		/** GET ALL DRIVERS **/
+		else {
+			Pageable pageable = PageRequest.of(commonPagination.getPageNo().intValue(),
+					commonPagination.getPageSize().intValue());
+			Page<Drivers> drivers = driversRepo.findAll(pageable);
+			driverscontent = drivers.getContent();
+		}
 		if (!driverscontent.isEmpty() && driverscontent != null) {
 			for (Drivers driver : driverscontent) {
-				Long active = driver.getActive() ? 1L :0L;
+				Long active = driver.getActive() ? 1L : 0L;
 				if (isActive == active) {
 					getDriversByIsActive(allDriversDataList, driver);
-				} else if(isActive == 2L){
+				} else if (isActive == 2L) {
 					getDriversByIsActive(allDriversDataList, driver);
 				}
 				paginationData.setList(allDriversDataList);
-				paginationData.setTotalCount(driverscontent.size());
+				paginationData.setTotalCount(count);
 			}
 		}
 		return paginationData;
@@ -116,17 +130,19 @@ public class DriversServiceImpl implements DriversService{
 	}
 
 	@Override
-	public DriversNameData getDriversName() {
-		DriversNameData driversNameData = new DriversNameData();
+	public List<DriversNameData> getDriversName() {
+		List<DriversNameData> driverNameList=new ArrayList<>();
 		List<Drivers> driversList = driversRepo.findAll();
 		if (!driversList.isEmpty() && driversList != null) {
 			for (Drivers drivers : driversList) {
+				DriversNameData driversNameData = new DriversNameData();
 				driversNameData.setId(drivers.getDriverId());
 				driversNameData.setDriverName(drivers.getName() + " -" + drivers.getDriverId());
+				driverNameList.add(driversNameData);
 			}
-			return driversNameData;
+			
 		}
-		return null;
+		return driverNameList;
 	}
 
 	@Override

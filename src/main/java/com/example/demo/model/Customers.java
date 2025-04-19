@@ -40,9 +40,12 @@ public class Customers {
 	@Column(name="LastmodifyDate")
 	private Date lastmodifyDate;
 	
-	@Column(name="GST")
-	private String gst;
+	@Column(name="GstNumber")
+	private String gstNumber;
 	
 	@Column(name="Country")
 	private String country;
+	
+	@Column(name="State")
+	private String state;
 }

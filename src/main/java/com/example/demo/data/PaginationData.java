@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class PaginationData {
 
-	private Integer totalCount;
+	private Long totalCount;
 	
 	private List<?> list;
 }

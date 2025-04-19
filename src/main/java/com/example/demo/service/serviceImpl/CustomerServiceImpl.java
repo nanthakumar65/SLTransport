@@ -1,5 +1,6 @@
 package com.example.demo.service.serviceImpl;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.data.CustomerNameResponse;
 import com.example.demo.data.PaginationData;
 import com.example.demo.data.ResponseData;
 import com.example.demo.model.CountryCode;
@@ -38,8 +40,9 @@ public class CustomerServiceImpl implements CustomerService{
 		customer.setAddress(customersPayload.getAddress());
 		customer.setTeleCode(customersPayload.getTeleCode());
 		customer.setPhone(customersPayload.getPhone());
-		customer.setGst(customersPayload.getGstNumber());
+		customer.setGstNumber(customersPayload.getGstNumber());
 		customer.setCountry(customersPayload.getCountry());
+		customer.setState(customersPayload.getState());
 		Customers saveCustomers = customersRepo.save(customer);
 		if(saveCustomers != null) {
 			responseData.setResult(true);
@@ -52,17 +55,18 @@ public class CustomerServiceImpl implements CustomerService{
 	}
 
 	@Override
-	public List<Customers> getCustomerDetails(CommonPagination commonPagination) {
+	public PaginationData getCustomerDetails(CommonPagination commonPagination) {
 		PaginationData paginationData = new PaginationData();
+		 long count = customersRepo.count();
 		Pageable pageable = PageRequest.of(commonPagination.getPageNo().intValue(),
 				commonPagination.getPageSize().intValue());
 		Page<Customers> PageCustomersList = customersRepo.findAll(pageable);
 		List<Customers> customersList = PageCustomersList.getContent();
 		if (!customersList.isEmpty() && customersList != null) {
 			paginationData.setList(customersList);
-			paginationData.setTotalCount(customersList.size());
+			paginationData.setTotalCount(count);
 		}
-		return Collections.emptyList();
+		return paginationData;
 	}
 
 	@Override
@@ -77,9 +81,9 @@ public class CustomerServiceImpl implements CustomerService{
 	@Override
 	public ResponseData deleteCustomerById(Long customerId) {
 		ResponseData responseData = new ResponseData();
-		Optional<CountryCode> countryCode = countryCodeRepo.findById(customerId);
-		if (countryCode.isPresent()) {
-			countryCodeRepo.deleteById(customerId);
+		Optional<Customers> coustomer = customersRepo.findById(customerId);
+		if (coustomer.isPresent()) {
+			customersRepo.deleteById(customerId);
 			responseData.setMessage("Successfully Deleted");
 			responseData.setResult(true);
 			responseData.setStatus("Success");
@@ -87,6 +91,51 @@ public class CustomerServiceImpl implements CustomerService{
 			responseData.setMessage("Deleted Failed");
 		}
 		return responseData;
+	}
+
+	@Override
+	public ResponseData updateCustomer(Long customerId, CustomersPayload customersPayload) {
+		ResponseData responseData = new ResponseData();
+		Optional<Customers> customer = customersRepo.findById(customerId);
+		if (customer.isPresent()) {
+			customer.get().setCustomerName(customersPayload.getCustomerName());
+			customer.get().setAddress(customersPayload.getAddress());
+			customer.get().setCountry(customersPayload.getCountry());
+			customer.get().setGstNumber(customersPayload.getGstNumber());
+			customer.get().setPhone(customersPayload.getPhone());
+			customer.get().setTeleCode(customersPayload.getTeleCode());
+			customer.get().setState(customersPayload.getState());
+			Customers save = customersRepo.save(customer.get());
+			if (save != null) {
+				responseData.setMessage("Updated Successfully");
+				responseData.setResult(true);
+				responseData.setStatus("Success");
+			} else {
+				responseData.setMessage("Updated Failed");
+			}
+		}
+		return responseData;
+	}
+
+	@Override
+	public List<CustomerNameResponse> getCustomerName() {
+		
+		List<Customers>cutomersList=customersRepo.findAll();
+		
+		List<CustomerNameResponse> customerResponseList=new ArrayList<>();
+		
+		if(!cutomersList.isEmpty())
+		{
+			for(Customers customers:cutomersList)
+			{
+				CustomerNameResponse customerNameResponse=new CustomerNameResponse();
+				customerNameResponse.setCustomerId(customers.getCustomerId());
+				customerNameResponse.setCustomerName(customers.getCustomerName()); 
+				customerResponseList.add(customerNameResponse);
+			}
+		}
+		
+		return customerResponseList;
 	}
 	
 	

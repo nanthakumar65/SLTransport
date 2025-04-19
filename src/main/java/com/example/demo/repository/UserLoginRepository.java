@@ -9,4 +9,6 @@ import com.example.demo.model.UserLogin;
 public interface UserLoginRepository extends JpaRepository<UserLogin,Long >{
 
 	Optional<UserLogin> findByUserEmailAndUserPsw(String userName, String UserPsw);
+
+	Optional<UserLogin> findByUserEmail(String userName);
 }

@@ -7,9 +7,11 @@ import lombok.Data;
 @Data
 public class DriverShimentPayload {
 
-	private String name;
+	private Long customerId;
 	
-	private String vehicleNumber;
+	private Long vehicleId;
+	
+	private Long driverId;
 	
 	private String source;
 	
@@ -19,15 +21,18 @@ public class DriverShimentPayload {
 	
 	private String driverExpense;
 	
-	private String shipmentType;
+	private Long shipmentTypeId;
 	
 	private String shipmentQuantity;
 	
-	private String shipmentTransType;
+	private Long shipmentTransTypeId;
 	
 	private String shiftType;
 	
 	private String inDriver;
 	
-	private Date shipmentDate;
+	
+	private String secondDriver;
+	
+	private String ShipmentDate;
 }

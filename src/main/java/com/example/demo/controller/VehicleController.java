@@ -1,11 +1,14 @@
 package com.example.demo.controller;
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -16,11 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.data.PaginationData;
 import com.example.demo.data.ResponseData;
+import com.example.demo.data.VechileNumberResponse;
 import com.example.demo.payload.CommonPagination;
 import com.example.demo.payload.VehiclePayload;
 import com.example.demo.service.VehicleInterface;
 
-@CrossOrigin(origins = "http://192.168.45.134:2020")
+@CrossOrigin
 @RestController
 public class VehicleController {
 	
@@ -70,6 +74,20 @@ public class VehicleController {
 			return new ResponseEntity<>(VehiclePaginationData, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(VehiclePaginationData, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@GetMapping(value="/getVehicleNumber")
+	public ResponseEntity<List<VechileNumberResponse>> getVechileNumber()
+	{
+		List<VechileNumberResponse>vechileResponseList=vehicleInterface.getVechileNumber();
+		if(!vechileResponseList.isEmpty())
+		{
+			return new ResponseEntity<>(vechileResponseList, HttpStatus.OK);
+		}
+		else
+		{
+			return new ResponseEntity<>(vechileResponseList, HttpStatus.OK);	
 		}
 	}
 	

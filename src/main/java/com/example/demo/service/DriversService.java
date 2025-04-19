@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import java.util.List;
+
 import com.example.demo.data.DriversNameData;
 import com.example.demo.data.PaginationData;
 import com.example.demo.data.ResponseData;
@@ -13,7 +15,7 @@ public interface DriversService {
 
 	public PaginationData getDriversDetails(Long isActive,CommonPagination commonPagination);
 
-	public DriversNameData getDriversName();
+	public List<DriversNameData> getDriversName();
 
 	public ResponseData deleteDriverById(Long driverId);
 

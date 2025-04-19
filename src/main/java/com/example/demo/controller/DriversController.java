@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +22,7 @@ import com.example.demo.payload.NewDriverPayload;
 import com.example.demo.service.DriversService;
 
 @RestController
-@CrossOrigin(origins = "http://192.168.45.134:2020")
+@CrossOrigin
 public class DriversController {
 	
 	@Autowired
@@ -47,12 +49,12 @@ public class DriversController {
 	}
 	
 	@GetMapping("/getDriversName")
-	public ResponseEntity<DriversNameData> getDriversName() {
-		DriversNameData driversName = driversService.getDriversName();
-		if (driversName != null) {
-			return new ResponseEntity<>(driversName, HttpStatus.OK);
+	public ResponseEntity<List<DriversNameData>> getDriversName() {
+		List<DriversNameData> driversNameList = driversService.getDriversName();
+		if (driversNameList != null) {
+			return new ResponseEntity<>(driversNameList, HttpStatus.OK);
 		}
-		return new ResponseEntity<>(driversName, HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<>(driversNameList, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@DeleteMapping("/deleteDriverById/{driverId}")

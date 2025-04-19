@@ -22,9 +22,9 @@ public class AllDriversData {
 	
 	private String licenseNumber;
 	
-	private String ntExpiry;
+	private LocalDate ntExpiry;
 	
-	private String tExpiry;
+	private LocalDate tExpiry;
 	
 	private String accNumber;
 	

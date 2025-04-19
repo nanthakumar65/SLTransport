@@ -15,7 +15,7 @@ import com.example.demo.payload.ProfilePayload;
 import com.example.demo.service.ProfileService;
 
 @RestController
-@CrossOrigin(origins = "http://192.168.45.134:2020")
+@CrossOrigin
 public class ProfileController {
 
 	@Autowired

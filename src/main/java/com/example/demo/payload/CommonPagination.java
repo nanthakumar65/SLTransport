@@ -10,4 +10,6 @@ public class CommonPagination {
 	private Long pageSize;
 	
 	private Long isActive;
+	
+	private String searchKey;
 }

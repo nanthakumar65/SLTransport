@@ -14,7 +14,7 @@ import com.example.demo.payload.UserLoginData;
 import com.example.demo.service.UserLoginService;
 
 @RestController
-@CrossOrigin(origins = "http://192.168.45.134:2020")
+@CrossOrigin
 public class UserLoginController {
 	
 	@Autowired

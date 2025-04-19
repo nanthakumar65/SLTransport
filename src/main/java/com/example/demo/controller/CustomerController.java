@@ -11,20 +11,21 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.Util.DateUtil;
-import com.example.demo.data.CountryData;
+import com.example.demo.data.CustomerNameResponse;
+import com.example.demo.data.PaginationData;
 import com.example.demo.data.ResponseData;
 import com.example.demo.model.CountryCode;
-import com.example.demo.model.Customers;
 import com.example.demo.payload.CommonPagination;
 import com.example.demo.payload.CustomersPayload;
 import com.example.demo.service.CustomerService;
 
 @RestController
-@CrossOrigin(origins = "http://192.168.45.134:2020")
+@CrossOrigin
 public class CustomerController {
 
 	@Autowired
@@ -40,13 +41,13 @@ public class CustomerController {
 		}
 	}
 	
-	@GetMapping("/getCustomersDetails")
-	public ResponseEntity<List<Customers>> getCustomerDetails(@RequestBody CommonPagination commonPagination) {
-		List<Customers> customersList = customerService.getCustomerDetails(commonPagination);
-		if (!customersList.isEmpty()) {
-			return new ResponseEntity<>(customersList, HttpStatus.OK);
+	@PostMapping("/getCustomersDetails")
+	public ResponseEntity<PaginationData> getCustomerDetails(@RequestBody CommonPagination commonPagination) {
+		PaginationData paginationData = customerService.getCustomerDetails(commonPagination);
+		if (paginationData !=null) {
+			return new ResponseEntity<>(paginationData, HttpStatus.OK);
 		} else {
-			return new ResponseEntity<>(customersList, HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(paginationData, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 	
@@ -78,6 +79,29 @@ public class CustomerController {
 		} else {
 			return new ResponseEntity<>(allCountry, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+	}
+	
+	@PutMapping("/updateCustomer/{customerId}")
+	public ResponseEntity<ResponseData> updateCustomer(@PathVariable("customerId") Long customerId,
+			@RequestBody CustomersPayload customersPayload) {
+		ResponseData updateCustomer = customerService.updateCustomer(customerId, customersPayload);
+		if (updateCustomer != null) {
+			return new ResponseEntity<>(updateCustomer, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(updateCustomer, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	
+	@GetMapping(value="/getCustomerName")
+	public ResponseEntity<List<CustomerNameResponse>> getCustomerName() {
+		List<CustomerNameResponse> customerNameList = customerService.getCustomerName();
+		if (!customerNameList.isEmpty()) {
+			return new ResponseEntity<>(customerNameList, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(customerNameList, HttpStatus.OK);
+		}
+
 	}
 	
 	

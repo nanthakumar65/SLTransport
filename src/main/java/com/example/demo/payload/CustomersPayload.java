@@ -16,4 +16,6 @@ public class CustomersPayload {
 	private String gstNumber;
 	
 	private String country;
+	
+	private String state;
 }
